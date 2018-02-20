@@ -6,6 +6,7 @@ services:
     build: elasticsearch/
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - es:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -14,19 +15,19 @@ services:
     networks:
       - elk
 
-  logstash:
-    build: logstash/
-    volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - ./logstash/pipeline:/usr/share/logstash/pipeline
-    ports:
-      - "5000:5000"
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    networks:
-      - elk
-    depends_on:
-      - elasticsearch
+#  logstash:
+#    build: logstash/
+ #   volumes:
+ #     - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+ #     - ./logstash/pipeline:/usr/share/logstash/pipeline
+  #  ports:
+   #   - "5000:5000"
+   # environment:
+   #   LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+   # networks:
+   #   - elk
+   # depends_on:
+    #  - elasticsearch
 
   kibana:
     build: kibana/
@@ -39,7 +40,10 @@ services:
     depends_on:
       - elasticsearch
 
-networks:
+volumes:
+  es:
+    
 
+networks:
   elk:
     driver: bridge
